@@ -64,7 +64,7 @@ def push_kafka_data_to_db():
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2023, 1, 1),
+    'start_date': datetime(2025, 10, 1),
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
