@@ -103,3 +103,6 @@ You can manage and monitor the crawling and model training jobs from the Airflow
 - `GET /jobs`: Get a list of all jobs from the database.
 - `POST /userProfile`: Create a user profile with job preferences.
 - `GET /recommendations/{user_id}`: Get job recommendations for a specific user.
+
+test done
+
