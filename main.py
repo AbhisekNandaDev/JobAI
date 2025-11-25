@@ -5,15 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.future import select
 from model_schema import SignupModel, LoginModel, ResetPasswordModel
-from models import User,Job
-from jwt_auth import create_jwt_token
-from dotenv import load_dotenv
-import os
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-import joblib
+
 
 
 app = FastAPI(docs_url='/docs')
@@ -108,15 +100,5 @@ async def get_recommendations(user_id: int, db: AsyncSession = Depends(get_db)):
     ])
     model = joblib.load(model_path)
     user = await db.execute(select(User).filter(User.id == user_id))
-    user = user.scalar()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    result = await db.execute(select(Job))
-    jobs = result.scalars().all()
-    job_descriptions = [job.jobdesc for job in jobs]
-    pipeline.fit(job_descriptions)
-    job_clusters = pipeline.predict(job_descriptions)
-    user_cluster = pipeline.predict([user.jobdesc])[0]
 
-    recommended_jobs = [jobs[i] for i in range(len(jobs)) if job_clusters[i] == user_cluster]
     return recommended_jobs[:10]
